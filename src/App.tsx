@@ -6,15 +6,20 @@ export default function App() {
   const [currentMove, setCurrentMove] = useState(0);
   const [winner, setWinner] = useState({ winner: null, slots: Array(3) });
   const xIsNext = currentMove % 2 === 0;
-  // const [moveSlotHistory, setMoveSlotHistory] = useState([
-  //   Array(9).fill({ row: null, col: null })
-  // ]);
-  // const currentMoveSlot = moveSlotHistory[currentMove];
+  const [slotHistory, setSlotHistory] = useState([] as any[]);
   const currentSquares = history[currentMove];
 
-  function handlePlay(nextSquares: any[]) {
+  function handlePlay({
+    nextSquares,
+    nextSlot
+  }: {
+    nextSquares: any[];
+    nextSlot: { row: number; col: number };
+  }) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    const nextSlotHistory = [...slotHistory.slice(0, currentMove), nextSlot];
     setHistory(nextHistory);
+    setSlotHistory(nextSlotHistory);
     setCurrentMove(nextHistory.length - 1);
     const _winner = calculateWinner(nextSquares);
     if (_winner) setWinner(_winner);
@@ -37,7 +42,12 @@ export default function App() {
         />
       </div>
       <div className="game-info">
-        <Moves history={history} jumpTo={jumpTo} currentMove={currentMove} />
+        <Moves
+          history={history}
+          jumpTo={jumpTo}
+          currentMove={currentMove}
+          slotHistory={slotHistory}
+        />
       </div>
     </div>
   );

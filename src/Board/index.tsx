@@ -10,10 +10,19 @@ const Board: FC<{
 }> = Props => {
   const rowSize = 3;
   const colSize = 3;
-  function handleClick(i: number) {
+  function handleClick({
+    i,
+    row,
+    col
+  }: {
+    i: number;
+    row: number;
+    col: number;
+  }) {
     if (Props?.winner?.winner || Props.squares[i]) {
       return;
     }
+    const nextSlot = { row, col };
     const nextSquares = Props.squares.slice();
     if (Props.xIsNext) {
       nextSquares[i] = "X";
@@ -21,7 +30,7 @@ const Board: FC<{
       nextSquares[i] = "O";
     }
 
-    Props.onPlay(nextSquares);
+    Props.onPlay({ nextSquares, nextSlot });
   }
 
   let status = "Next player: " + (Props.xIsNext ? "X" : "O");
@@ -42,7 +51,7 @@ const Board: FC<{
                 key={col}
                 value={Props.squares[curCol]}
                 onSquareClick={() => {
-                  handleClick(curCol);
+                  handleClick({ i: curCol, row, col });
                 }}
                 isWinner={Props?.winner?.slots.includes(curCol)}
               />

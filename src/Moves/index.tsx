@@ -3,10 +3,18 @@ const Moves: FC<{
   history: any[][];
   jumpTo: Function;
   currentMove: number;
+  slotHistory: any[];
 }> = Props => {
   const [isReverse, setIsReverse] = useState(false);
   let moves = Props.history.map((_, move) => {
-    const desc = Number(move) > 0 ? "Go to move #" + move : "Go to game start";
+    const desc =
+      Number(move) > 0
+        ? "Go to move #" +
+          move +
+          ` row: ${Props.slotHistory[move - 1].row} col: ${
+            Props.slotHistory[move - 1].col
+          }`
+        : "Go to game start";
     if (move === Props.currentMove)
       return (
         <li key={move}>
